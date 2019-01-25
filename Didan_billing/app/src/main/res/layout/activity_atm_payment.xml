@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/main_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tViewIdText"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:textSize="20sp"
+        android:textColor="@color/colorBlack"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@string/text_voucher_id"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.521" />
+    <TextView
+        android:id="@+id/tViewId"
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:textSize="18sp"
+        android:textColor="@color/colorBlack"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tViewIdText"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+    <TextView
+        android:id="@+id/tViewAddress"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:textSize="18sp"
+        android:textColor="@color/colorBlack"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tViewFio"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+    <TextView
+        android:id="@+id/tViewFio"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:textSize="18sp"
+        android:textColor="@color/colorBlack"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tViewId"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.504" />
+</android.support.constraint.ConstraintLayout>
