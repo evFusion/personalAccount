@@ -16,6 +16,8 @@ All work with php scripts which are take data from MySQL DB. Information returns
 
 First activity - entry point and authentication center. 
 Using customer login and password you will be redirect on activity with user data. 
+Getting user data and compare login/pass pair do two php scripts (db_conn.php and get_info.php).
+Entered login/pass send and compare with data in remote MySQL DB.
 
 ![User data](https://github.com/evFusion/personalAccount/blob/master/user-data-screen.png)
 
