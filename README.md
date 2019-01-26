@@ -12,9 +12,17 @@ All work with php scripts which are take data from MySQL DB. Information returns
 ***
 ### How It Works
 
+![Login screen](https://github.com/evFusion/personalAccount/blob/master/login-screen.png)
+
 First activity - entry point and authentication center. 
 Using customer login and password you will be redirect on activity with user data. 
+
+![User data](https://github.com/evFusion/personalAccount/blob/master/user-data-screen.png)
+
 On this way there is a possibility go to deposit funds or to activate the service on credit (this functionality in feature plans).
+
+![Payment methods](https://github.com/evFusion/personalAccount/blob/master/payment-methods.png)
+
 From every activity you can go back with data saving.
 
 ### in process rebuilding:
