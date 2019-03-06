@@ -33,10 +33,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(new LatLng(11, 11)).title("*****").snippet("****");
+        markerOptions.position(new LatLng(48.04454, 37.97469)).title("г. Макеевка, м-н Зелёный, д.10а").snippet("DIDAN");
         Marker officeLocationMarker = googleMap.addMarker(markerOptions);
         officeLocationMarker.showInfoWindow();
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(11, 11)).zoom(19).build();
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(48.04454, 37.97469)).zoom(19).build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         googleMap.animateCamera(cameraUpdate);
     }

@@ -5,63 +5,99 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="fusion.didan_billing.MainActivity">
+    tools:context="fusion.didan_billing.MainActivity"
+    android:padding="32dp">
 
     <TextView
-        android:layout_width = "wrap_content"
-        android:layout_height = "wrap_content"
-        android:text = "Ваша домашняя сеть!"
-        android:id = "@+id/textView"
-        android:layout_centerHorizontal = "true"
-        android:textColor = "#ff7aff24"
-        android:textSize = "35dp"
-        tools:layout_editor_absoluteY="34dp"
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="33dp"
+        android:gravity = "center"
+        android:text="@string/text_hello"
+        android:textColor="#3a59a2"
+        android:textSize="30sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/imageView"
+        android:contentDescription="@string/logoDescription"
         android:layout_width="150dp"
         android:layout_height="148dp"
-        android:id="@+id/imageView"
-        android:src="@drawable/didan-logo"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
-        tools:layout_editor_absoluteY="80dp"
+        android:layout_marginTop="13dp"
+        android:src="@drawable/didan_logo"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
-        android:layout_width = "wrap_content"
-        android:layout_height = "wrap_content"
-        android:id = "@+id/editText"
-        android:hint = "Enter Name"
-        android:focusable = "true"
-        android:textColorHighlight = "#ff7eff15"
-        android:textColorHint = "#ffff25e6"
-        android:layout_below = "@+id/imageView"
-        android:layout_alignParentLeft = "true"
-        android:layout_alignParentStart = "true"
-        android:layout_alignParentRight = "true"
-        android:layout_alignParentEnd = "true"
-        tools:layout_editor_absoluteY="273dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <EditText
-        android:layout_width="wrap_content"
+        android:id="@+id/fieldLogin"
+        android:drawableLeft="@drawable/login"
+        android:drawableStart="@drawable/login"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/editText2"
-        android:layout_below="@+id/editText"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imageView"
+        android:layout_marginTop="35dp"
+        android:focusable="true"
+        android:hint="@string/text_login"
+        android:textColorHint="#3a59a2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <EditText
+        android:id="@+id/fieldPassword"
+        android:drawableLeft="@drawable/password"
+        android:drawableStart="@drawable/password"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/fieldLogin"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/editText"
-        android:layout_alignEnd="@+id/editText"
-        android:textColorHint="#ffff299f"
-        android:hint="Password"
-        tools:layout_editor_absoluteY="359dp"
+        android:layout_alignRight="@+id/fieldLogin"
+        android:layout_below="@+id/fieldLogin"
+        android:layout_marginTop="8dp"
+        android:hint="@string/text_password"
+        android:inputType="textPassword"
+        android:textColorHint="#3a59a2"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fieldLogin" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:background="@drawable/button_config"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/text_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fieldPassword" />
+
+    <TextView
+        android:id="@+id/textViewReminder"
+        android:layout_width="0dp"
+        android:layout_height="83dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="14sp"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
 </android.support.constraint.ConstraintLayout>

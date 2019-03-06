@@ -21,6 +21,6 @@ public class BankPaymentActivity extends AppCompatActivity {
 
         CustomWebViewClient webViewClient = new CustomWebViewClient(this);
         webBrowser.setWebViewClient(webViewClient);
-        webBrowser.loadUrl(".....");
+        webBrowser.loadUrl("https://sprutpay.ru/service/account?seller=1109");
     }
 }

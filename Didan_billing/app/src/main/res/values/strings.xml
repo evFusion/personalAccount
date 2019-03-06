@@ -1,3 +1,30 @@
 <resources>
-    <string name="app_name">Didan_billing</string>
+    <string name="app_name">Didan</string>
+    <string name="logoDescription">didan_logo</string>
+    <string name="text_login">Введите логин</string>
+    <string name="text_password">Введите пароль</string>
+    <string name="text_button">Войти</string>
+    <string name="text_hello">Ваша домашняя сеть!</string>
+    <string name="text_account">Лицевой счет</string>
+    <string name="text_account_balance">Баланс</string>
+    <string name="text_account_fill">Пополнить счет</string>
+    <string name="text_account_credit">Интернет в кредит</string>
+    <string name="text_account_service">Интернет</string>
+    <string name="text_payment">Оплата</string>
+    <string name="text_payment_cards">Пополнение ваучером</string>
+    <string name="text_payment_terminal">Пополнение через терминал</string>
+    <string name="text_payment_wm">Пополнение через WebMoney</string>
+    <string name="text_cd_on_map">Наш абонентский отдел</string>
+    <string name="text_activity_payment_voucher">Пополнение ваучером</string>
+    <string name="text_activity_payment_atm">Оплата в терминалах</string>
+    <string name="text_activity_payment_wm">Оплата через WebMoney</string>
+    <string name="text_activity_payment_bank">Оплата картой ЦРБ</string>
+    <string name="text_activity_payment_cd">Абонентский отдел на карте</string>
+    <string name="text_payment_bank">Оплата картой ЦРБ</string>
+    <string name="text_voucher_id">Ваш ID для пополнения в терминалах оплаты</string>
+    <string name="google_maps_api_key">AIzaSyASzwAlKdcSx2lNvSzcEkwCDgllPWFjYw4</string>
+    <string name="text_voucher_series">Серия</string>
+    <string name="text_voucher_number">Номер</string>
+    <string name="text_voucher_button">Оплатить</string>
+    <string name="text_voucher_attempts">После 5 неверных попыток - возможность пополнения карточкой будет заблокирована.</string>
 </resources>

@@ -22,7 +22,7 @@ public class PaymentActivity extends AppCompatActivity implements OnClickListene
 
     public static String LOG_TAG = "my_log";
     private static final int ERROR_MAP_APPEAR = 404;
-    Bundle arguments;
+    //Bundle arguments;
     Intent iExp;
     CardView cardViewCards, cardViewWM, cardViewAtm, cardViewCd, cardViewBank;
     @Override
@@ -68,9 +68,9 @@ public class PaymentActivity extends AppCompatActivity implements OnClickListene
             case R.id.cardViewAtm:
                 iExp = new Intent(new Intent(PaymentActivity.this, AtmPaymentActivity.class));
                 //Bundle arguments = getIntent().getExtras();
-                arguments = getIntent().getExtras();
+                //arguments = getIntent().getExtras();
 
-                if(arguments != null) {
+                /*if(arguments != null) {
                     String id = arguments.get("id").toString();
                     String name = arguments.get("name").toString();
                     String surname = arguments.get("surname").toString();
@@ -83,7 +83,7 @@ public class PaymentActivity extends AppCompatActivity implements OnClickListene
                     iExp.putExtra("name", name);
                     iExp.putExtra("surname", surname);
                     iExp.putExtra("patronymic", patronymic);
-                }
+                }*/
                 startActivity(iExp);
                 break;
             case R.id.cardViewCards:
@@ -104,7 +104,7 @@ public class PaymentActivity extends AppCompatActivity implements OnClickListene
                 iExp = new Intent(new Intent(PaymentActivity.this, BankPaymentActivity.class));
                 startActivity(iExp);
                 break;
-            default:break;
+            default: break;
         }
     }
 }
