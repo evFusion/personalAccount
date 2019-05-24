@@ -5,28 +5,58 @@
 
 package fusion.didan_billing;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import static fusion.didan_billing.R.id.balanceInfoNumber;
+import static fusion.didan_billing.R.id.creditStatus;
 import static fusion.didan_billing.R.id.customerAccount;
 import static fusion.didan_billing.R.id.customerAddress;
-import static fusion.didan_billing.R.id.customerLogin;
+import static fusion.didan_billing.R.id.customerFio;
+import static fusion.didan_billing.R.id.customerMobile;
+import static fusion.didan_billing.R.id.customerSession;
 import static fusion.didan_billing.R.id.customerTariff;
+import static fusion.didan_billing.R.id.recommendedForPayment;
 
-public class UserDataActivity extends AppCompatActivity {
+public class UserDataActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
 
+    private static final String TAG = UserDataActivity.class.getSimpleName();
     public static String LOG_TAG = "my_log";
+    public static String URL_SET_CREDIT = "set_credit_php_script_address";
+    private ProgressDialog pDialog;
+    public boolean flagActivateButton;
+    public String creditStatusMsg;
 
-    TextView tvFio, tvAcount, tvAddress, tvTariff, tvdeposit;
+    TextView tvFio, tvAccount, tvAddress, tvMobile, tvSesTime, tvTariff, tvDeposit, tvCreditStatus, tvRecomendedPay;
     Button btnPay, btnCredit;
     Intent iExp;
     SharedPreferences sPref;
@@ -36,66 +66,201 @@ public class UserDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userdata);
 
-        tvdeposit = findViewById(balanceInfoNumber);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(false);
+
+        tvDeposit = findViewById(balanceInfoNumber);
         tvAddress = findViewById(customerAddress);
-        tvAcount = findViewById(customerAccount);
-        tvFio = findViewById(customerLogin);
+        tvMobile = findViewById(customerMobile);
+        tvSesTime = findViewById(customerSession);
+        tvAccount = findViewById(customerAccount);
+        tvFio = findViewById(customerFio);
         tvTariff = findViewById(customerTariff);
         btnPay = findViewById(R.id.btnPay);
         btnCredit = findViewById(R.id.btnCredit);
+        tvCreditStatus = findViewById(creditStatus);
+        tvRecomendedPay = findViewById(recommendedForPayment);
+
         DecimalFormat df = new DecimalFormat("0.00");
 
         sPref = getSharedPreferences("Mypref", Context.MODE_PRIVATE);
-        String uidPref = sPref.getString("uid", "");
+
+        final String uidPref = sPref.getString("uid", "");
         String idPref = sPref.getString("id", "");
         String passwordPref = sPref.getString("password", "");
         String fioPref = sPref.getString("fio", "");
-        String streetPref = sPref.getString("address_street", "");
-        String buildPref = sPref.getString("address_build", "");
-        String flatPref = sPref.getString("address_flat", "");
-        float depositPref = Float.valueOf(sPref.getString("deposit", ""));
+        String streetPref = sPref.getString("addressStreet", "");
+        String buildPref = sPref.getString("addressBuild", "");
+        String flatPref = sPref.getString("addressFlat", "");
+        //float depositPref = Float.valueOf(sPref.getString("deposit", ""));
+        float depositPref = sPref.getFloat("deposit", 1);
         String creditPref = sPref.getString("credit", "");
-        String credit_datePref = sPref.getString("credit_date", "");
+        String mobile = sPref.getString("mobile", "");
+        String sessionTime = sPref.getString("sessionTime", "");
+        String creditDatePref = sPref.getString("creditDate", "");
         String tarifPref = sPref.getString("tarif", "");
-        int day_feePref = sPref.getInt("day_fee", 1);
+        float dayFeePref = sPref.getFloat("dayFee", 1);
+        int usecredPref = sPref.getInt("usecred", 1);
 
 
-        tvdeposit.setText(df.format(depositPref) + " \u20BD");//₽
-        //tvdeposit.setText(depositPref + " \u20BD");//₽
+        tvDeposit.setText(df.format(depositPref) + " \u20BD");//₽
+        float recomendedPay = ((dayFeePref*30) - depositPref);
+        tvRecomendedPay.setText(df.format(recomendedPay) + " \u20BD");
+
+        if ((usecredPref == 0) && (depositPref > 0)) {
+            creditStatusMsg = "Кредит не активен";
+            flagActivateButton = true;
+        } else if ((usecredPref == 0) && (depositPref <= 0)){
+            creditStatusMsg = "Кредит не активен";
+        } else {
+            creditStatusMsg = "Кредит активен";
+            flagActivateButton = true;
+        }
+        tvCreditStatus.setText(creditStatusMsg);
+
         tvAddress.setText(streetPref + " " + buildPref + ", " + flatPref);
-        tvAcount.setText("Договор: " + uidPref);
+        tvAccount.setText(uidPref);
         tvFio.setText(fioPref);
-        tvTariff.setText(tarifPref + "\n" +  " (" + day_feePref*30 + " руб. / мес.)" + "\n" + " (" + day_feePref +  " руб. / день)");
+        tvTariff.setText(tarifPref + "\n" +  " (" + dayFeePref*30 + " руб. | мес.)" + "\n" + " (" + df.format(dayFeePref) +  " руб. | день)");
+        tvMobile.setText(mobile);
+        tvSesTime.setText(sessionTime);
 
         btnPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 iExp = new Intent(new Intent(UserDataActivity.this, PaymentActivity.class));
-
-                /*Bundle arguments = getIntent().getExtras();
-
-                if(arguments != null) {
-                    String id = arguments.get("id").toString();
-                    String name = arguments.get("name").toString();
-                    String surname = arguments.get("surname").toString();
-                    String patronymic = arguments.get("patronymic").toString();
-                    Log.d(LOG_TAG, id);
-                    Log.d(LOG_TAG, name);
-                    Log.d(LOG_TAG, surname);
-                    Log.d(LOG_TAG, patronymic);
-                    iExp.putExtra("id", id);
-                    iExp.putExtra("name", name);
-                    iExp.putExtra("surname", surname);
-                    iExp.putExtra("patronymic", patronymic);
-                }*/
                 startActivity(iExp);
             }
         });
         btnCredit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (flagActivateButton) {
+                    Toast.makeText(getApplicationContext(), "Лимит кредитов исчерпан", Toast.LENGTH_LONG).show();
+                    btnCredit.setEnabled(false);
+                } else {
+                    setCredit(uidPref);
+                }
             }
         });
+//*********************NAVIGATION DRAWER***********************************
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    /*@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }*/
+
+    /*@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }*/
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return false;
+    }
+//*********************NAVIGATION DRAWER***********************************
+    private void setCredit(final String uid) {
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_credit";
+
+            btnCredit.setEnabled(true);
+            Log.d(LOG_TAG, uid);
+            pDialog.setMessage("Активируем отложенный платеж ...");
+            showDialog();
+
+            StringRequest strReq = new StringRequest(Request.Method.POST, URL_SET_CREDIT,
+                    new Response.Listener<String>() {
+
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d(TAG, "Credit Response: " + response.toString());
+                            hideDialog();
+
+                            try {
+                                JSONObject jObj = new JSONObject(response);
+                                //boolean error = jObj.getBoolean("error"); 111
+                                String message = jObj.getString("message");
+                                Log.d(LOG_TAG, message);
+                                //if (!error) { 111
+                                // User successfully stored in MySQL
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                                tvCreditStatus.setText("Кредит включен");
+                                //Toast.makeText(getApplicationContext(), "CREDIT YES", Toast.LENGTH_LONG).show();
+                                // } else {  111
+                                // Error occurred in the activation of the credit. Get the error message
+                                //String errorMsg = jObj.getString("error_msg");
+                                //Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
+                                //}
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, "Credit Error: " + error.getMessage());
+                    Toast.makeText(getApplicationContext(),
+                            error.getMessage(), Toast.LENGTH_LONG).show();
+                    hideDialog();
+                }
+            }) {
+
+                @Override
+                protected Map<String, String> getParams() {
+                    // Posting params to register url
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("uid", uid);
+
+                    return params;
+                }
+
+            };
+
+            // Adding request to request queue
+            AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        }
+
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 }

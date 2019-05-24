@@ -23,7 +23,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyASzwAlKdcSx2lNvSzcEkwCDgllPWFjYw4" />
+            android:value="key" />
 
         <activity
             android:name=".MainActivity"
@@ -37,7 +37,9 @@
         <activity
             android:name=".UserDataActivity"
             android:label="@string/text_account"
-            android:theme="@style/AppThemeWithAB"></activity>
+            android:theme="@style/AppThemeNoAB">
+
+        </activity>
         <activity
             android:name=".PaymentActivity"
             android:label="@string/text_payment"

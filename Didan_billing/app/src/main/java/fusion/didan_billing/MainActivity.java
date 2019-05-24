@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     public static String LOG_TAG = "my_log";
-    public static String URL_CHECK = "path_to_php_script";
+    public static String URL_GET_DATA = "get_info_php_script_address";
     private ProgressDialog pDialog;
 
     Button btnLogin;
@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
     Intent iExp;
     SharedPreferences sPref;
 
-    String remindMessage = "Если вы забыли свой логин/пароль наберите техническую поддержку: ";
+    String remindMessage = "Если вы забыли свой логин/пароль наберите техническую поддержку: (071) 099-81-98";
     int counter = 3;
 
     @Override
@@ -88,14 +88,14 @@ public class MainActivity extends Activity {
             }
         });
     }
-    public  void checkUserData(final String login, final String password) {
+    public void checkUserData(final String login, final String password) {
 
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         pDialog.setMessage("Подключаемся ...");
         showDialog();
 
-        StringRequest strReq = new StringRequest(Request.Method.POST, URL_CHECK, new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Request.Method.POST, URL_GET_DATA, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -106,36 +106,28 @@ public class MainActivity extends Activity {
                     JSONObject jObj = new JSONObject(response);
                     // Check for error node in json
                     //if (!error) {
-                        // Now store the user in SQLite
+                        //Get data from php script via json
                         String id = jObj.getString("id");
                         String uid = jObj.getString("uid");
                         String password = jObj.getString("password");
                         String fio = jObj.getString("fio");
-                        String address_street = jObj.getString("address_street");
-                        String address_build = jObj.getString("address_build");
-                        String address_flat = jObj.getString("address_flat");
-                        String deposit = jObj.getString("deposit");
+                        String addressStreet = jObj.getString("addressStreet");
+                        String addressBuild = jObj.getString("addressBuild");
+                        String addressFlat = jObj.getString("addressFlat");
+                        double deposit = jObj.getDouble("deposit");
                         String credit = jObj.getString("credit");
-                        String credit_date = jObj.getString("credit_date");
+                        String creditDate = jObj.getString("creditDate");
+                        String mobile = jObj.getString("mobile");
+                        String sessionTime = jObj.getString("sesTime");
                         String tarif = jObj.getString("tarif");
-                        int day_fee = jObj.getInt("day_fee");
+                        double dayFee = jObj.getDouble("dayFee");
+                        int usecred = jObj.getInt("usecred");
 
                         Log.d(LOG_TAG, id);
                         Log.d(LOG_TAG, uid);
 
-//**********************
-                    // Inserting row in users table
-                    //db.addUser(name, email, uid, created_at);
-
                     // Launch UserData activity with received data
                     iExp = new Intent(new Intent(MainActivity.this, UserDataActivity.class));
-                    //iExp.putExtra("id", id);
-                    //iExp.putExtra("login", login);
-                    //iExp.putExtra("name", name);
-                    //iExp.putExtra("surname", surname);
-                    //iExp.putExtra("patronymic", patronymic);
-                    //iExp.putExtra("tarif", tarif);
-                    //iExp.putExtra("balance", balance);
 
                     sPref = getSharedPreferences("Mypref", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sPref.edit();
@@ -144,14 +136,17 @@ public class MainActivity extends Activity {
                     editor.putString("id",id);
                     editor.putString("password",password);
                     editor.putString("fio",fio);
-                    editor.putString("address_street",address_street);
-                    editor.putString("address_build", address_build);
-                    editor.putString("address_flat", address_flat);
-                    editor.putString("deposit", deposit);
+                    editor.putString("addressStreet",addressStreet);
+                    editor.putString("addressBuild", addressBuild);
+                    editor.putString("addressFlat", addressFlat);
+                    editor.putFloat("deposit", (float) deposit);
                     editor.putString("credit", credit);
-                    editor.putString("credit_date", credit_date);
+                    editor.putString("creditDate", creditDate);
                     editor.putString("tarif", tarif);
-                    editor.putInt("day_fee", day_fee);
+                    editor.putString("mobile", mobile);
+                    editor.putString("sessionTime", sessionTime);
+                    editor.putFloat("dayFee", (float) dayFee);
+                    editor.putInt("usecred", usecred);
                     editor.apply();
 
                     startActivity(iExp);
