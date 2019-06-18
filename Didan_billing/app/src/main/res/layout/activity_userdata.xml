@@ -23,7 +23,7 @@
         android:id="@+id/balanceInfoText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
         android:textColor="@color/colorGrey2"
         android:gravity="center_horizontal|center_vertical"

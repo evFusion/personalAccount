@@ -9,9 +9,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -36,6 +38,11 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import fusion.didan_billing.fragments.FragmentPayment;
+import fusion.didan_billing.fragments.FragmentTickets;
+import fusion.didan_billing.fragments.FragmentTicketsForm;
+import fusion.didan_billing.fragments.FragmentVoucher;
+
 import static fusion.didan_billing.R.id.balanceInfoNumber;
 import static fusion.didan_billing.R.id.creditStatus;
 import static fusion.didan_billing.R.id.customerAccount;
@@ -47,11 +54,13 @@ import static fusion.didan_billing.R.id.customerTariff;
 import static fusion.didan_billing.R.id.recommendedForPayment;
 
 public class UserDataActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener,
+                    FragmentTickets.OnFragmentInteractionListener,
+                    FragmentTicketsForm.OnFragmentInteractionListener {
 
     private static final String TAG = UserDataActivity.class.getSimpleName();
     public static String LOG_TAG = "my_log";
-    public static String URL_SET_CREDIT = "set_credit_php_script_address";
+    public static String URL_SET_CREDIT = "path_to_the script";
     private ProgressDialog pDialog;
     public boolean flagActivateButton;
     public String creditStatusMsg;
@@ -60,6 +69,10 @@ public class UserDataActivity extends AppCompatActivity
     Button btnPay, btnCredit;
     Intent iExp;
     SharedPreferences sPref;
+
+    FragmentPayment fpayment;
+    FragmentVoucher fvoucher;
+    FragmentTickets ftickets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +165,18 @@ public class UserDataActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        fpayment = new FragmentPayment();
+        fvoucher = new FragmentVoucher();
+        ftickets = new FragmentTickets();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri){
+        //you can leave it empty
     }
 
     @Override
@@ -164,33 +189,41 @@ public class UserDataActivity extends AppCompatActivity
         }
     }
 
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }*/
-
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+        FragmentTransaction fTransaction = getSupportFragmentManager().beginTransaction();
+
+        switch (item.getItemId()) {
+            case R.id.money_fragment:
+                setTitle("Денежный счет");
+                fTransaction.replace(R.id.container, fpayment);
+                break;
+            case R.id.info_fragment:
+                setTitle("Информация");
+                Intent c = new Intent(UserDataActivity.this, UserDataActivity.class);
+                startActivity(c);
+                break;
+            case R.id.card_fragment:
+                setTitle("Карта пополнения");
+                fTransaction.replace(R.id.container, fvoucher);
+                break;
+            case R.id.tickets_fragment:
+                setTitle("Заявки");
+                //fTransaction.replace(R.id.container, ftickets);
+                fTransaction.add(R.id.container, new FragmentTickets());
+                break;
+            //case R.id.settings_fragment:
+            default:
+                break;
+        }
+
+        fTransaction.commit();
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 //*********************NAVIGATION DRAWER***********************************
+
     private void setCredit(final String uid) {
 
         // Tag used to cancel the request

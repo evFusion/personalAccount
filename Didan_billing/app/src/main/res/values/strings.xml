@@ -22,7 +22,7 @@
     <string name="text_activity_payment_cd">Абонентский отдел на карте</string>
     <string name="text_payment_bank">Оплата картой ЦРБ</string>
     <string name="text_voucher_id">Ваш ID для пополнения в терминалах оплаты</string>
-    <string name="google_maps_api_key">key</string>
+    <string name="google_maps_api_key">AIzaSyASzwAlKdcSx2lNvSzcEkwCDgllPWFjYw4</string>
     <string name="text_voucher_series">Серия</string>
     <string name="text_voucher_number">Номер</string>
     <string name="text_voucher_button">Оплатить</string>
@@ -33,7 +33,12 @@
     <string name="info_fragment">Информация</string>
     <string name="money_fragment">Деньги</string>
     <string name="card_fragment">Карта пополнения</string>
-    <string name="request_fragment">Заявки</string>
+    <string name="tickets_fragment">Заявки</string>
     <string name="settings_fragment">Настройки</string>
     <string name="exit_fragment">Выход</string>
+    <string name="tickets_fragment_text">Активных зявок нет</string>
+
+    <string name="fr_ticket_theme">Тема *</string>
+    <string name="fr_ticket_text">Описание *</string>
+    <string name="fr_btn_submit">СОЗДАТЬ</string>
 </resources>

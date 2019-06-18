@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     public static String LOG_TAG = "my_log";
-    public static String URL_GET_DATA = "get_info_php_script_address";
+    public static String URL_GET_DATA = "path_to_the script";
     private ProgressDialog pDialog;
 
     Button btnLogin;
@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
     Intent iExp;
     SharedPreferences sPref;
 
-    String remindMessage = "Если вы забыли свой логин/пароль наберите техническую поддержку: (071) 099-81-98";
+    String remindMessage = "Если вы забыли свой логин/пароль наберите техническую поддержку: (000) 000-00-00";
     int counter = 3;
 
     @Override
