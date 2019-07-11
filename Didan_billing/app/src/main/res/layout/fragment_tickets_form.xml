@@ -36,7 +36,6 @@
         android:layout_alignRight="@+id/fieldTicketTheme"
         android:layout_below="@+id/fieldTicketTheme"
         android:hint="@string/fr_ticket_text"
-        android:inputType="textPassword"
         android:textColorHint="#3a59a2"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@+id/fieldTicketTheme"
@@ -47,7 +46,7 @@
         app:layout_constraintHorizontal_bias="0.0" />
 
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnCreateTicket"
         android:layout_width="395dp"
         android:layout_height="41dp"
         android:layout_alignParentBottom="true"

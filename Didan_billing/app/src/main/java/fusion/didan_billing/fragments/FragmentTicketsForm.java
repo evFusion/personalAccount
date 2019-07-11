@@ -4,9 +4,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import fusion.didan_billing.R;
 
@@ -65,8 +68,47 @@ public class FragmentTicketsForm extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tickets_form, container, false);
+        //return inflater.inflate(R.layout.fragment_tickets_form, container, false);
+        View view = inflater.inflate(R.layout.fragment_tickets_form, container, false);
+
+        Button button = view.findViewById(R.id.btnCreateTicket);
+        final EditText editTextTheme = view.findViewById(R.id.fieldTicketTheme);
+        final EditText editTextText = view.findViewById(R.id.fieldTicketText);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTickets fragmentTickets = new FragmentTickets();
+
+                String theme = editTextTheme.getText().toString();
+                String text = editTextText.getText().toString();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("textInThemeField", theme);
+                bundle.putString("textInTextField", text);
+                fragmentTickets.setArguments(bundle);
+
+                FragmentManager manager = getFragmentManager();
+                manager.beginTransaction().replace(R.id.container, fragmentTickets).commit();
+            }
+        });
+
+        return view;
     }
+
+   /* @Override
+    public void onStart() {
+        super.onStart();
+        Button button = getActivity().findViewById(R.id.btnCreateTicket);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView textView = getActivity().findViewById(R.id.currentTicket);
+                EditText editText = getActivity().findViewById(R.id.fieldTicketTheme);
+                textView.setText(editText.getText());
+            }
+        });
+    }*/
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

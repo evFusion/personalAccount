@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import fusion.didan_billing.R;
 
@@ -70,8 +71,21 @@ public class FragmentTickets extends Fragment {
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_tickets, container, false);
         View view = inflater.inflate(R.layout.fragment_tickets, container, false);
-                fab = view.findViewById(R.id.fab);
 
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String theme = bundle.getString("textInThemeField");
+            String text = bundle.getString("textInTextField");
+            TextView textView2 = view.findViewById(R.id.textView2);
+            TextView textView3 = view.findViewById(R.id.textView3);
+            TextView textViewCurrentTickets = view.findViewById(R.id.currentTicket);
+            textViewCurrentTickets.setVisibility(View.INVISIBLE);
+
+            textView2.setText(theme);
+            textView3.setText(text);
+        }
+
+        fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

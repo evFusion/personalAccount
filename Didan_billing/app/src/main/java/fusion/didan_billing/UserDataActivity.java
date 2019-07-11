@@ -60,7 +60,7 @@ public class UserDataActivity extends AppCompatActivity
 
     private static final String TAG = UserDataActivity.class.getSimpleName();
     public static String LOG_TAG = "my_log";
-    public static String URL_SET_CREDIT = "path_to_the script";
+    public static String URL_SET_CREDIT = "path/to/the/script";
     private ProgressDialog pDialog;
     public boolean flagActivateButton;
     public String creditStatusMsg;
