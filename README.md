@@ -47,7 +47,7 @@ From every activity you can go back with data saving.
 
 ### in process rebuilding:
 - ~~activate the service on credit;~~
-- ~~store data on local DB (now in shared preferences);~~
+- ~~store data on MySQL (now in shared preferences);~~
 - ~~menu in navdrawer;~~
 - ~~create troubleticket in fragment;~~
 - ~~move project on fragments;~~
