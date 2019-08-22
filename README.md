@@ -23,11 +23,33 @@ Entered login/pass send and compare with data in remote MySQL DB.
 
 On this way there is a possibility go to deposit funds or to activate the service on credit (this functionality in feature plans).
 
+![Navdrawer](https://github.com/evFusion/personalAccount/blob/master/naw-drawer.jpg)
+
+Useful menu block.
+
+![Troubleticket](https://github.com/evFusion/personalAccount/blob/master/created-troubleticket.jpg)
+
+![Troubleticket_form](https://github.com/evFusion/personalAccount/blob/master/form-to-create-ticket.jpg)
+
+On this screens you can create/view new troubletickets.
+
+![Settings](https://github.com/evFusion/personalAccount/blob/master/settings-screen.jpg)
+
+Add or change phone number.
+
 ![Payment methods](https://github.com/evFusion/personalAccount/blob/master/payment-methods.png)
+
+![Payments](https://github.com/evFusion/personalAccount/blob/master/pay-voucher.jpg)
+
+Recharge your personal account with a voucher.
 
 From every activity you can go back with data saving.
 
 ### in process rebuilding:
-- activate the service on credit;
-- store data on local DB (now in shared preferences);
+- ~~activate the service on credit;~~
+- ~~store data on local DB (now in shared preferences);~~
+- ~~menu in navdrawer;~~
+- ~~create troubleticket in fragment;~~
+- ~~move project on fragments;~~
+- account settings screen;
 - deposit funds with special user voucher.
