@@ -1,13 +1,18 @@
 package fusion.didan_billing.fragments;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import fusion.didan_billing.R;
@@ -34,6 +39,14 @@ public class FragmentTickets extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    private static final String TAG = FragmentTickets.class.getSimpleName();
+    public static String LOG_TAG = "my_log";
+    private ProgressDialog pDialog;
+
+    SharedPreferences sPref;
+    TextView tvPolomka, tvComment, tvAddDate, tvState, tvCurrentTicket;
+    LinearLayout llInfoTicket;
+
     public FragmentTickets() {
         // Required empty public constructor
     }
@@ -59,6 +72,7 @@ public class FragmentTickets extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -69,20 +83,34 @@ public class FragmentTickets extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_tickets, container, false);
+        String stateTickets = "Заявка выполняется";
+        sPref = this.getActivity().getSharedPreferences("Mypref", Context.MODE_PRIVATE);
+
+        final String uidPref = sPref.getString("uid", "");
+        String polomkaPref = sPref.getString("polomka", "");
+        String commentsPref = sPref.getString("comments", "");
+        String addDatePref = sPref.getString("addDate", "");
+
+        pDialog = new ProgressDialog(getActivity());
+        pDialog.setCancelable(false);
+
         View view = inflater.inflate(R.layout.fragment_tickets, container, false);
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String theme = bundle.getString("textInThemeField");
-            String text = bundle.getString("textInTextField");
-            TextView textView2 = view.findViewById(R.id.textView2);
-            TextView textView3 = view.findViewById(R.id.textView3);
-            TextView textViewCurrentTickets = view.findViewById(R.id.currentTicket);
-            textViewCurrentTickets.setVisibility(View.INVISIBLE);
+        tvPolomka = view.findViewById(R.id.textPolomkaText);
+        tvAddDate = view.findViewById(R.id.textAddDateText);
+        tvState = view.findViewById(R.id.textStateText);
+        tvCurrentTicket = view.findViewById(R.id.currentTicket);
+        llInfoTicket = view.findViewById(R.id.linearLayout);
 
-            textView2.setText(theme);
-            textView3.setText(text);
+        Log.d(LOG_TAG, polomkaPref);
+
+        if (!polomkaPref.equals("null")) {
+            tvPolomka.setText(polomkaPref);
+            tvAddDate.setText(addDatePref);
+            tvState.setText(stateTickets);
+            tvCurrentTicket.setVisibility(View.INVISIBLE);
+        } else {
+            llInfoTicket.setVisibility(View.INVISIBLE);
         }
 
         fab = view.findViewById(R.id.fab);

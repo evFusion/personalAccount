@@ -1,17 +1,35 @@
 package fusion.didan_billing.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import fusion.didan_billing.AppController;
 import fusion.didan_billing.R;
+import fusion.didan_billing.UserDataActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +50,14 @@ public class FragmentTicketsForm extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private static final String TAG = FragmentTickets.class.getSimpleName();
+    public static String LOG_TAG = "my_log";
+    public static String URL_ADD_NEW_TICKETS = "path_to_the_script";
+
+    private ProgressDialog pDialog;
+
+    SharedPreferences sPref;
 
     public FragmentTicketsForm() {
         // Required empty public constructor
@@ -68,47 +94,38 @@ public class FragmentTicketsForm extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_tickets_form, container, false);
         View view = inflater.inflate(R.layout.fragment_tickets_form, container, false);
 
-        Button button = view.findViewById(R.id.btnCreateTicket);
+        sPref = this.getActivity().getSharedPreferences("Mypref", Context.MODE_PRIVATE);
+
+        final String uidPref = sPref.getString("uid", "");
+
+        Button buttonCreate = view.findViewById(R.id.btnCreateTicket);
         final EditText editTextTheme = view.findViewById(R.id.fieldTicketTheme);
         final EditText editTextText = view.findViewById(R.id.fieldTicketText);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        buttonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTickets fragmentTickets = new FragmentTickets();
 
-                String theme = editTextTheme.getText().toString();
-                String text = editTextText.getText().toString();
+                String textTheme = editTextTheme.getText().toString().trim();
+                String textBody = editTextText.getText().toString().trim();
 
-                Bundle bundle = new Bundle();
-                bundle.putString("textInThemeField", theme);
-                bundle.putString("textInTextField", text);
-                fragmentTickets.setArguments(bundle);
-
-                FragmentManager manager = getFragmentManager();
-                manager.beginTransaction().replace(R.id.container, fragmentTickets).commit();
+                if (!textTheme.isEmpty() && !textBody.isEmpty()) {
+                    createNewTicket(uidPref, textTheme, textBody);
+                } else {
+                    Toast.makeText(getActivity(), "Заполните пожалуйста все поля!", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
         return view;
     }
 
-   /* @Override
+    @Override
     public void onStart() {
         super.onStart();
-        Button button = getActivity().findViewById(R.id.btnCreateTicket);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TextView textView = getActivity().findViewById(R.id.currentTicket);
-                EditText editText = getActivity().findViewById(R.id.fieldTicketTheme);
-                textView.setText(editText.getText());
-            }
-        });
-    }*/
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -147,5 +164,85 @@ public class FragmentTicketsForm extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    private void createNewTicket(final String uid, final String theme, final String text) {
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_insert";
+
+        Log.d(LOG_TAG, uid);
+
+        pDialog = new ProgressDialog(getActivity());
+        pDialog.setMessage("Ваша заявка появится тут немного позже");
+        showDialog();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST, URL_ADD_NEW_TICKETS,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "Create Ticket Response: " + response.toString());
+                        hideDialog();
+
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+                            String message = jObj.getString("message");
+                            Log.d(LOG_TAG, message);
+                            // Ticket successfully stored in MySQL
+                            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+
+                            // Error occurred in the activation of the credit. Get the error message
+                            //String errorMsg = jObj.getString("error_msg");
+                            //Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
+                            //}
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Create ticket error: " + error.getMessage());
+                Toast.makeText(getActivity(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to create url
+                Map<String, String> params = new HashMap<>();
+                params.put("uid", uid);
+                params.put("theme", theme);
+                params.put("text", text);
+
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                startActivity(new Intent(getActivity(), UserDataActivity.class));
+            }
+        }, 2000);
+
+
+    }
+
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 }

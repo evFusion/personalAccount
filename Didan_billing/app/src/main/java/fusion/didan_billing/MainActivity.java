@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     public static String LOG_TAG = "my_log";
-    public static String URL_GET_DATA = "path/to/the/script";
+    public static String URL_GET_DATA = "path_to_the_script";
     private ProgressDialog pDialog;
 
     Button btnLogin;
@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
     Intent iExp;
     SharedPreferences sPref;
 
-    String remindMessage = "Если вы забыли свой логин/пароль обратитесь в техническую поддержку: 000-000-000";
+    String remindMessage = "blah-blah-blah";
     int counter = 3;
 
     @Override
@@ -60,12 +60,7 @@ public class MainActivity extends Activity {
                 String login = fieldLogin.getText().toString().trim();
                 String password = fieldPassword.getText().toString().trim();
                 if (!login.isEmpty() && !password.isEmpty()) {
-                    //new RequestHandler().checkUserData(login, password);
                     checkUserData(login, password);
-                    //iExp = new Intent(new Intent(MainActivity.this, UserData.class));
-                    //startActivity(iExp);
-                    //Toast.makeText(getApplicationContext(),
-                    //       "Redirecting...",Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "Неправильный логин или пароль", Toast.LENGTH_SHORT).show();
@@ -122,6 +117,11 @@ public class MainActivity extends Activity {
                         String tarif = jObj.getString("tarif");
                         double dayFee = jObj.getDouble("dayFee");
                         int usecred = jObj.getInt("usecred");
+                        String polomka = jObj.getString("ticketsPolomka");
+                        String comments = jObj.getString("ticketsComments");
+                        String addDate = jObj.getString("ticketsAddDate");
+                        String state = jObj.getString("ticketsState");
+
 
                         Log.d(LOG_TAG, id);
                         Log.d(LOG_TAG, uid);
@@ -147,6 +147,10 @@ public class MainActivity extends Activity {
                     editor.putString("sessionTime", sessionTime);
                     editor.putFloat("dayFee", (float) dayFee);
                     editor.putInt("usecred", usecred);
+                    editor.putString("polomka", polomka);
+                    editor.putString("comments", comments);
+                    editor.putString("addDate", addDate);
+                    editor.putString("state", state);
                     editor.apply();
 
                     startActivity(iExp);

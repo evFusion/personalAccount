@@ -38,7 +38,19 @@
     <string name="exit_fragment">Выход</string>
     <string name="tickets_fragment_text">Активных зявок нет</string>
 
+    <string name="tickets_fragment_type_ticket">Тип заявки</string>
+    <string name="tickets_fragment_date_ticket">Дата создания</string>
+    <string name="tickets_fragment_ticket_status">Статус выполнения</string>
+
+    <string name="settings_fragment_main_text">Номера телефонов</string>
+    <string name="settings_fragment_general_number">Основной номер телефона</string>
+    <string name="settings_fragment_extra_number">Доп. номер телефона</string>
+
+
     <string name="fr_ticket_theme">Тема *</string>
     <string name="fr_ticket_text">Описание *</string>
     <string name="fr_btn_submit">СОЗДАТЬ</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

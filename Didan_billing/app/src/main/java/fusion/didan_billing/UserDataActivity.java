@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fusion.didan_billing.fragments.FragmentPayment;
+import fusion.didan_billing.fragments.FragmentSettings;
 import fusion.didan_billing.fragments.FragmentTickets;
 import fusion.didan_billing.fragments.FragmentTicketsForm;
 import fusion.didan_billing.fragments.FragmentVoucher;
@@ -60,7 +61,7 @@ public class UserDataActivity extends AppCompatActivity
 
     private static final String TAG = UserDataActivity.class.getSimpleName();
     public static String LOG_TAG = "my_log";
-    public static String URL_SET_CREDIT = "path/to/the/script";
+    public static String URL_SET_CREDIT = "path_to_the_script";
     private ProgressDialog pDialog;
     public boolean flagActivateButton;
     public String creditStatusMsg;
@@ -73,6 +74,7 @@ public class UserDataActivity extends AppCompatActivity
     FragmentPayment fpayment;
     FragmentVoucher fvoucher;
     FragmentTickets ftickets;
+    FragmentSettings fsettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +141,11 @@ public class UserDataActivity extends AppCompatActivity
         tvFio.setText(fioPref);
         tvTariff.setText(tarifPref + "\n" +  " (" + dayFeePref*30 + " руб. | мес.)" + "\n" + " (" + df.format(dayFeePref) +  " руб. | день)");
         tvMobile.setText(mobile);
-        tvSesTime.setText(sessionTime);
+        if (sessionTime.equals("null")) {
+            tvSesTime.setText("Сегодня не было");
+        } else {
+            tvSesTime.setText(sessionTime);
+        }
 
         btnPay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,6 +178,7 @@ public class UserDataActivity extends AppCompatActivity
         fpayment = new FragmentPayment();
         fvoucher = new FragmentVoucher();
         ftickets = new FragmentTickets();
+        fsettings = new FragmentSettings();
     }
 
     @Override
@@ -209,10 +216,12 @@ public class UserDataActivity extends AppCompatActivity
                 break;
             case R.id.tickets_fragment:
                 setTitle("Заявки");
-                //fTransaction.replace(R.id.container, ftickets);
                 fTransaction.add(R.id.container, new FragmentTickets());
                 break;
-            //case R.id.settings_fragment:
+            case R.id.settings_fragment:
+                setTitle("Настройки");
+                fTransaction.add(R.id.container, fsettings);
+                break;
             default:
                 break;
         }
@@ -244,15 +253,13 @@ public class UserDataActivity extends AppCompatActivity
 
                             try {
                                 JSONObject jObj = new JSONObject(response);
-                                //boolean error = jObj.getBoolean("error"); 111
                                 String message = jObj.getString("message");
                                 Log.d(LOG_TAG, message);
-                                //if (!error) { 111
                                 // User successfully stored in MySQL
                                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
                                 tvCreditStatus.setText("Кредит включен");
-                                //Toast.makeText(getApplicationContext(), "CREDIT YES", Toast.LENGTH_LONG).show();
-                                // } else {  111
+
                                 // Error occurred in the activation of the credit. Get the error message
                                 //String errorMsg = jObj.getString("error_msg");
                                 //Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
@@ -275,7 +282,7 @@ public class UserDataActivity extends AppCompatActivity
                 @Override
                 protected Map<String, String> getParams() {
                     // Posting params to register url
-                    Map<String, String> params = new HashMap<String, String>();
+                    Map<String, String> params = new HashMap<>();
                     params.put("uid", uid);
 
                     return params;
@@ -285,7 +292,7 @@ public class UserDataActivity extends AppCompatActivity
 
             // Adding request to request queue
             AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-        }
+    }
 
     private void showDialog() {
         if (!pDialog.isShowing())
