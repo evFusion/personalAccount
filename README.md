@@ -19,7 +19,7 @@ Using customer login and password you will be redirect on activity with user dat
 Getting user data and compare login/pass pair do two php scripts (db_conn.php and get_info.php).
 Entered login/pass send and compare with data in remote MySQL DB.
 
-![User data](https://github.com/evFusion/personalAccount/blob/master/user-data-screen.png)
+![User data](https://github.com/evFusion/personalAccount/blob/master/new-user-data-screen.png.jpg)
 
 On this way there is a possibility go to deposit funds or to activate the service on credit (this functionality in feature plans).
 
